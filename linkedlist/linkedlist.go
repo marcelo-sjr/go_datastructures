@@ -2,16 +2,22 @@ package linkedlist
 
 import "errors"
 
+// LinkedList represents a generic singly linked list.
+// It stores references to the first and last nodes and keeps
+// track of the current number of elements.
 type LinkedList[T comparable] struct {
 	head *Node[T]
 	tail *Node[T]
 	size int
 }
 
+// New creates and returns an empty linked list with the type inserted.
 func New[T comparable]() *LinkedList[T] {
 	return &LinkedList[T]{}
 }
 
+// Append appends one or more values to the end of the list.
+// If no values are provided, the list remains unchanged.
 func (ll *LinkedList[T]) Append(val ...T) {
 	if len(val) == 0 {
 		return
@@ -20,13 +26,13 @@ func (ll *LinkedList[T]) Append(val ...T) {
 	ll.size += len(val)
 
 	if ll.head == nil {
-		node := Node[T]{
+		node := &Node[T]{
 			data: val[0],
 			next: nil,
 		}
 
-		ll.head = &node
-		ll.tail = &node
+		ll.head = node
+		ll.tail = node
 		val = val[1:]
 	}
 
@@ -41,6 +47,8 @@ func (ll *LinkedList[T]) Append(val ...T) {
 	}
 }
 
+// Values returns all elements in the list as a slice,
+// preserving their insertion order.
 func (ll *LinkedList[T]) Values() []T {
 	values := make([]T, 0, ll.size)
 
@@ -67,6 +75,8 @@ func (ll *LinkedList[T]) Find(val T) *Node[T] {
 	return nil
 }
 
+// InsertAfter inserts a new node immediately after the target node.
+// It returns an error if the target node is nil.
 func (ll *LinkedList[T]) InsertAfter(target *Node[T], val T) error {
 	if target == nil {
 		return errors.New("target node cannot be nil")
@@ -86,6 +96,9 @@ func (ll *LinkedList[T]) InsertAfter(target *Node[T], val T) error {
 	return nil
 }
 
+// Delete removes the specified node from the list.
+// It returns true if the node was found and removed,
+// or false otherwise.
 func (ll *LinkedList[T]) Delete(target *Node[T]) bool {
 	if ll == nil || ll.head == nil || target == nil {
 		return false
@@ -121,6 +134,7 @@ func (ll *LinkedList[T]) Delete(target *Node[T]) bool {
 	return false
 }
 
+// PushFront inserts a new value at the beginning of the list.
 func (ll *LinkedList[T]) PushFront(val T) {
 	node := &Node[T]{
 		data: val,
@@ -135,6 +149,7 @@ func (ll *LinkedList[T]) PushFront(val T) {
 	ll.size++
 }
 
+// PushBack inserts a new value at the end of the list.
 func (ll *LinkedList[T]) PushBack(val T) {
 	node := &Node[T]{
 		data: val,
@@ -152,28 +167,37 @@ func (ll *LinkedList[T]) PushBack(val T) {
 	ll.size++
 }
 
+// Head returns the first node of the list.
+// It returns nil if the list is empty.
 func (ll *LinkedList[T]) Head() *Node[T] {
 	return ll.head
 }
 
+// Tail returns the last node of the list.
+// It returns nil if the list is empty.
 func (ll *LinkedList[T]) Tail() *Node[T] {
 	return ll.tail
 }
 
+// Len returns the number of elements currently stored in the list.
 func (ll *LinkedList[T]) Len() int {
 	return ll.size
 }
 
+// IsEmpty reports whether the list contains no elements.
 func (ll *LinkedList[T]) IsEmpty() bool {
 	return ll.head == nil
 }
 
+// Clear removes all elements from the list,
+// leaving it in an empty state.
 func (ll *LinkedList[T]) Clear() {
 	ll.head = nil
 	ll.tail = nil
 	ll.size = 0
 }
 
+// Present reports whether the specified value exists in the list.
 func (ll *LinkedList[T]) Present(val T) bool {
 	n := ll.Find(val)
 	if n == nil {
