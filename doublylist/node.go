@@ -1,4 +1,4 @@
-package doublylist
+package dlist
 
 type Node[T comparable] struct {
 	data T
